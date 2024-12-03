@@ -1,0 +1,91 @@
+# Data storage
+students, courses, marks = [], [], {}
+
+def input_students():
+    try:
+        for _ in range(int(input("Number of students: "))):
+            student_id = input("ID: ").strip()
+            name = input("Name: ").strip()
+            dob = input("DoB (yyyy-mm-dddd): ").strip()
+            students.append((student_id, name, dob))
+    except ValueError:
+        print("Invalid input. Enter another valid number.")
+
+def input_courses():
+    try:
+        for _ in range(int(input("Number of courses: "))):
+            course_id = input("Course ID: ").strip()
+            course_name = input("Course name: ").strip()
+            courses.append((course_id, course_name))
+    except ValueError:
+        print("Invalid input. Enter another valid number.")
+
+def input_marks(course_id):
+    if course_id not in {c[0] for c in courses}:
+        print("Invalid course ID."); return
+    if course_id not in marks:
+        marks[course_id] = {}
+    for student in students:
+        try:
+            mark = float(input(f"Enter mark for {student[1]} ({student[0]}): "))
+            marks[course_id][student[0]] = mark
+        except ValueError:
+            print("Invalid mark. Please enter a numeric value.")
+
+def list_students():
+    print("Students:")
+    for s in students:
+        print(f"ID: {s[0]}, Name: {s[1]}, DoB: {s[2]}")
+
+def list_courses():
+    print("Courses:")
+    for c in courses:
+        print(f"ID: {c[0]}, Name: {c[1]}")
+
+def show_marks(course_id):
+    if course_id in marks:
+        print("Marks:")
+        for student in students:
+            if student[0] in marks[course_id]:
+                print(f"{student[1]} ({student[0]}): {marks[course_id][student[0]]}")
+    else:
+        print("No marks recorded for this course.")
+
+# Menu for interacting with the system
+def main():
+    while True:
+        print("\nStudent Mark Management System")
+        print("1. Input total student and their information")
+        print("2. Input courses name and their information")
+        print("3. Input marks for a selected course")
+        print("4. Show all courses")
+        print("5. Show all students")
+        print("6. Student marks for a given course")
+        print("7. Exit")
+        
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            input_students()
+        elif choice == "2":
+            input_courses()
+        elif choice == "3":
+            list_courses()
+            course_id = input("Enter course ID to input marks: ").strip()
+            input_marks(course_id)
+        elif choice == "4":
+            list_courses()
+        elif choice == "5":
+            list_students()
+        elif choice == "6":
+            list_courses()
+            course_id = input("Enter course ID to view marks: ").strip()
+            show_marks(course_id)
+        elif choice == "7":
+            print("Exiting the system.")
+            break
+        else:
+            print("Invalid choice, please try again.")
+
+if __name__ == "__main__":
+    main()
